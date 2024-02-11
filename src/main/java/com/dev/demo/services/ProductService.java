@@ -2,8 +2,6 @@ package com.dev.demo.services;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class ProductService {
 			Product newProduct = productRepository.save(product);
 			return new ResponseEntity<>(newProduct,HttpStatus.CREATED);
 		} catch (Exception e) {
-			LOG.error("Exception occured while saving product {}", e.getMessage());
+			System.out.println("Exception occurred while creating product " + e.getMessage());
 			return new ResponseEntity<>("Error while creating product", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -42,7 +40,7 @@ public class ProductService {
 
 			return ResponseEntity.ok(productRepository.findAll());
 		} catch (Exception e) {
-			LOG.error("Exception occured while getting all products {}", e.getMessage());
+			System.out.println("Exception occured while getting all products "+ e.getMessage());
 			return new ResponseEntity<>("Error while getting all products", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -65,7 +63,7 @@ public class ProductService {
 			Product savedEntity = productRepository.save(product);
 			return ResponseEntity.ok(savedEntity);
 		} catch (Exception e) {
-			LOG.error("Exception occured while updating products {}", e.getMessage());
+			System.out.println("Exception occured while updating products " + e.getMessage());
 			return new ResponseEntity<>("Error while updating product", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -82,7 +80,7 @@ public class ProductService {
 			productRepository.deleteById(id);
 			return ResponseEntity.ok("Product Deleted Successfully");
 		} catch (Exception e) {
-			LOG.error("Exception occured while deleting product {}", e.getMessage());
+			System.out.println("Exception occured while deleting product "+  e.getMessage());
 			return new ResponseEntity<>("Error while deleting product", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
@@ -113,11 +111,9 @@ public class ProductService {
 			productRepository.save(product);
 			return ResponseEntity.ok(product);
 		} catch (Exception e) {
-			LOG.error("Exception occured while updating product price {}", e.getMessage());
+			System.out.println("Exception occured while updating product price " + e.getMessage());
 			return new ResponseEntity<>("Error while updating product price", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
-
-	private static final Logger LOG = LoggerFactory.getLogger(ProductService.class);
 }
