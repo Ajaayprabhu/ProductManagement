@@ -73,6 +73,17 @@ class ProductManagementApplicationTests {
 		return new JSONObject(map);
 
 	}
+	
+	public JSONObject getProductDetailsWithId(int id, String name , String description,double price,  int quantity){
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("name", name);
+		map.put("description", description);
+		map.put("price", price);
+		map.put("quantity", quantity);
+		return new JSONObject(map);
+
+	}
 
 	@Test
 	@Order(3)
@@ -99,25 +110,39 @@ class ProductManagementApplicationTests {
 	
 	@Test
 	@Order(4)
-	public void putProducttwithId() throws Exception{
-		mvc.perform(put("/products/3")
-				.contentType(MediaType.APPLICATION_JSON_VALUE)
-				.content(getProductDetails("Scale","Transparent",2000,8)
-						.toJSONString())).andExpect(MockMvcResultMatchers.status().isOk());
-
-		mvc.perform(get("/products")
+	public void getProductById() throws Exception {
+		mvc.perform(get("/products/1")
 						.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.[2].name", containsStringIgnoringCase("Scale")))
-				.andExpect(jsonPath("$.[2].description", containsStringIgnoringCase("Transparent")))
-				.andExpect(jsonPath("$.[2].price", Matchers.is(2000.0)))
-				.andExpect(jsonPath("$.[2].quantity", Matchers.is(8)));
+				//"Pen","Ball point, Ink pen","Parker",1010.0,5
+				.andExpect(jsonPath("$.name", containsStringIgnoringCase("Pen")))
+				.andExpect(jsonPath("$.description", containsStringIgnoringCase("Ball point, Ink pen")))
+				.andExpect(jsonPath("$.price", Matchers.is(1010.0)))
+				.andExpect(jsonPath("$.quantity", Matchers.is(5)));
+				
+	}
+	
+	@Test
+	@Order(5)
+	public void putProducttwithId() throws Exception{
+		mvc.perform(put("/products")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.content(getProductDetailsWithId(3,"Scale","Transparent",2000,8)
+						.toJSONString())).andExpect(MockMvcResultMatchers.status().isOk());
+
+		mvc.perform(get("/products/3")
+						.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.name", containsStringIgnoringCase("Scale")))
+				.andExpect(jsonPath("$.description", containsStringIgnoringCase("Transparent")))
+				.andExpect(jsonPath("$.price", Matchers.is(2000.0)))
+				.andExpect(jsonPath("$.quantity", Matchers.is(8)));
 	
 
 	}
 
 	@Test
-	@Order(5)
+	@Order(6)
 	public void deleteProductbyId() throws Exception{
 
 		mvc.perform(delete("/products/4")
@@ -133,7 +158,7 @@ class ProductManagementApplicationTests {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void updateProductPrice() throws Exception{
 
 		mvc.perform(put("/products/updatePrice/3")
@@ -142,13 +167,13 @@ class ProductManagementApplicationTests {
 						.param("value", "10.0"))
 						.andExpect(status().isOk())
 						.andReturn();
-		mvc.perform(get("/products")
+		mvc.perform(get("/products/3")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$.[1].name", containsStringIgnoringCase("Scale")))
-		.andExpect(jsonPath("$.[1].description", containsStringIgnoringCase("Transparent")))
-		.andExpect(jsonPath("$.[1].price", Matchers.is(1800.0)))
-		.andExpect(jsonPath("$.[1].quantity", Matchers.is(8)));
+		.andExpect(jsonPath("$.name", containsStringIgnoringCase("Scale")))
+		.andExpect(jsonPath("$.description", containsStringIgnoringCase("Transparent")))
+		.andExpect(jsonPath("$.price", Matchers.is(1800.0)))
+		.andExpect(jsonPath("$.quantity", Matchers.is(8)));
 			
 		mvc.perform(put("/products/updatePrice/2")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -157,13 +182,13 @@ class ProductManagementApplicationTests {
 				.andExpect(status().isOk())
 				.andReturn();
 		
-		mvc.perform(get("/products")
+		mvc.perform(get("/products/2")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.[0].name", containsStringIgnoringCase("Pencil")))
-			.andExpect(jsonPath("$.[0].description", containsStringIgnoringCase("Provided with eraser backside")))
-			.andExpect(jsonPath("$.[0].price", Matchers.is(561.0)))
-			.andExpect(jsonPath("$.[0].quantity", Matchers.is(10)));
+			.andExpect(jsonPath("$.name", containsStringIgnoringCase("Pencil")))
+			.andExpect(jsonPath("$.description", containsStringIgnoringCase("Provided with eraser backside")))
+			.andExpect(jsonPath("$.price", Matchers.is(561.0)))
+			.andExpect(jsonPath("$.quantity", Matchers.is(10)));
 	}
 
 }

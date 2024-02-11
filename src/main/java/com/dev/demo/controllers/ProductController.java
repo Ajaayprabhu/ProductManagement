@@ -27,16 +27,21 @@ public class ProductController {
 	public ResponseEntity<?> getAllProducts() {
 		return productService.getAllProducts();
 	}
+	
+	@GetMapping("/products/{productId}")
+	public ResponseEntity<?> getProductById(@PathVariable(value = "productId") Integer productId) {
+		return productService.getProductById(productId);
+	}
 
 	@PostMapping("/products")
 	public ResponseEntity<?> saveProduct(@RequestBody Product product) {
 		return productService.saveProduct(product);
 	}
 
-	@PutMapping(path = "/products/{productId}")
-	public ResponseEntity<?> updateProduct(@PathVariable(value = "productId") Integer productId,
+	@PutMapping(path = "/products")
+	public ResponseEntity<?> updateProduct(
 			@RequestBody Product product) {
-		return productService.updateProduct(productId, product);
+		return productService.updateProduct(product);
 	}
 
 	@PutMapping("/products/updatePrice/{productId}")

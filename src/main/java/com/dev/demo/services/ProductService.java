@@ -38,17 +38,37 @@ public class ProductService {
 			if (productList == null || productList.isEmpty())
 				return new ResponseEntity<>("No products found", HttpStatus.BAD_REQUEST);
 
-			return ResponseEntity.ok(productRepository.findAll());
+			return ResponseEntity.ok(productList);
 		} catch (Exception e) {
 			System.out.println("Exception occured while getting all products "+ e.getMessage());
 			return new ResponseEntity<>("Error while getting all products", HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
+	
+	public ResponseEntity<?> getProductById(Integer id) {
+		try {
 
-	public ResponseEntity<?> updateProduct(Integer id, Product updatedProduct) {
+			Product product = productRepository.findById(id).orElse(null);
+
+			if (product == null)
+				return new ResponseEntity<>("Product not found found", HttpStatus.BAD_REQUEST);
+
+			return ResponseEntity.ok(product);
+		} catch (Exception e) {
+			System.out.println("Exception occured while getting product "+ e.getMessage());
+			return new ResponseEntity<>("Error while getting product", HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+	}
+
+
+	public ResponseEntity<?> updateProduct(Product updatedProduct) {
 
 		try {
+			
+			Integer id = updatedProduct.getId();
+			
 			if (id == null) {
 				throw new IllegalArgumentException("ID cannot be null");
 			}
